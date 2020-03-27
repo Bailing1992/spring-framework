@@ -55,6 +55,14 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.BeanFactory
  * @see org.springframework.aop.framework.ProxyFactoryBean
  * @see org.springframework.jndi.JndiObjectFactoryBean
+ *
+ *
+ *
+ * 一般情况下， Spring 通过 反射机制 利用 bean 的 class 属性指定实现类来实例化bean。在
+ * 某些情况下，实例化bean 过程比较复杂，如果按照传统的方式， 则需要在＜bean＞ 中提供大量
+ * 的配置信息，配置方式的灵活性是受限的，这时采用编码的方式可能会得到一个简单的方案。
+ * Spring 为此提供了一个org.Springframework.bean.factory. FactoryBean 的工厂类接口，用户可以
+ * 通过实现该接口定制实例化bean 的逻辑。
  */
 public interface FactoryBean<T> {
 
@@ -85,6 +93,9 @@ public interface FactoryBean<T> {
 	 * @return an instance of the bean (can be {@code null})
 	 * @throws Exception in case of creation errors
 	 * @see FactoryBeanNotInitializedException
+	 *
+	 * 返回由 FactoryBean 创建的bean 实例，如果isSingleton（）返回true ，则
+	 * 该实例会放到 Spring 容器中单实例缓存池中。
 	 */
 	@Nullable
 	T getObject() throws Exception;
@@ -107,6 +118,15 @@ public interface FactoryBean<T> {
 	 * @return the type of object that this FactoryBean creates,
 	 * or {@code null} if not known at the time of the call
 	 * @see ListableBeanFactory#getBeansOfType
+	 * 返回FactoryBean 创建的bean 类型。
+	 *
+	 *
+	 *
+	 *
+	 * 当 配置文件 中＜bean＞的class 属性配置的实现类是FactoryBean 时，通过getBean()方法返回的不是FactoryBean 本身，
+	 * 而是FactoryBean#getObject（）方法所返回的对象，相当于
+	 * FactoryBean#getObject （）代理了getBean （）方法。
+	 *
 	 */
 	@Nullable
 	Class<?> getObjectType();
@@ -135,6 +155,10 @@ public interface FactoryBean<T> {
 	 * @return whether the exposed object is a singleton
 	 * @see #getObject()
 	 * @see SmartFactoryBean#isPrototype()
+	 *
+	 * 返回由 FactoryBean 创建的bean 实例的作用域是singleton 还是
+	 * prototype
+	 *
 	 */
 	default boolean isSingleton() {
 		return true;

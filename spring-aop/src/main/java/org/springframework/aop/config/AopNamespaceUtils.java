@@ -74,18 +74,30 @@ public abstract class AopNamespaceUtils {
 	public static void registerAspectJAnnotationAutoProxyCreatorIfNecessary(
 			ParserContext parserContext, Element sourceElement) {
 
+		//注册或者升级AnnotationAwareAspectJAutoProxyCreator
 		BeanDefinition beanDefinition = AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(
 				parserContext.getRegistry(), parserContext.extractSource(sourceElement));
+		//处理 Proxy-target-class 以及 expose-proxy 属性
 		useClassProxyingIfNecessary(parserContext.getRegistry(), sourceElement);
 		registerComponentIfNecessary(beanDefinition, parserContext);
 	}
 
 	private static void useClassProxyingIfNecessary(BeanDefinitionRegistry registry, @Nullable Element sourceElement) {
 		if (sourceElement != null) {
+			// 对于 proxy-target-class 属性的处理
+			/**
+			 *   Spring AOP 部分使用JDK 动态代理或者CGLIB 来为目标对象创建
+			 * 代理（建议尽量使用JDK 的动态代理）。如果被代理的目标对象实现了至少一个接口，
+			 * 则会使用JDK 动态代理。所有该目标类型实现的接口都将被代理。若该目标对象没有
+			 * 实现任何接口，则创建一个CGLIB 代理。如果你希望强制使用CGLIB 代理（例如希
+			 * 望代理目标对象的所有方法，而不只是实现自接口的方法），那也可以
+			 * */
 			boolean proxyTargetClass = Boolean.parseBoolean(sourceElement.getAttribute(PROXY_TARGET_CLASS_ATTRIBUTE));
 			if (proxyTargetClass) {
+				//强制使用的过程其实也是一个属性设置的过程
 				AopConfigUtils.forceAutoProxyCreatorToUseClassProxying(registry);
 			}
+			//对于 expose-proxy 属性的处理
 			boolean exposeProxy = Boolean.parseBoolean(sourceElement.getAttribute(EXPOSE_PROXY_ATTRIBUTE));
 			if (exposeProxy) {
 				AopConfigUtils.forceAutoProxyCreatorToExposeProxy(registry);

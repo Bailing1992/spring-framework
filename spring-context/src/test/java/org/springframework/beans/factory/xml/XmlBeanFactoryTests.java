@@ -132,6 +132,7 @@ class XmlBeanFactoryTests {
 		factory.preInstantiateSingletons();
 	}
 
+
 	@Test
 	void refToSeparatePrototypeInstances() {
 		DefaultListableBeanFactory xbf = new DefaultListableBeanFactory();

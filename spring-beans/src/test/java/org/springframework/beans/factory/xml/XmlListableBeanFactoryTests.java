@@ -127,6 +127,14 @@ public class XmlListableBeanFactoryTests extends AbstractListableBeanFactoryTest
 		assertThat(validEmpty.getAge()).isEqualTo(0);
 	}
 
+
+
+	@Test  // SPR-2368
+	void testXmlFactory() {
+		BeanFactory factory= new XmlBeanFactory (new ClassPathResource ("org/springframework/beans/factory/xml/test.xml"));
+		factory.getBean("myalias");
+	}
+
 	/**
 	 * Test that properties with name as well as id creating an alias up front.
 	 */

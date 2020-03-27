@@ -48,6 +48,9 @@ import org.springframework.util.Assert;
  * @see #getResource
  * @see #getResourceByPath
  * @see GenericApplicationContext
+ *
+ * ApplicationContext 和BeanFacotry 两者都是用于加载Bean 的，但是相比之下， ApplicationContext
+ * 提供了更多的扩展功能，简单一点说： ApplicationContext 包含BeanFactory 的所有功能。 *
  */
 public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContext {
 
@@ -133,6 +136,9 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	 * @param parent the parent context
 	 * @throws BeansException if context creation failed
 	 * @see #refresh()
+	 *
+	 * 设置路径是必不可少的步骤， ClassPathXmlApplicationContext 中可以将配置文件路径以数组的方式传人，
+	 * ClassPathXmlApplicationContext 可以对数组进行解析并进行加载。而对于解析及功能实现都在refresh（）中实现。
 	 */
 	public ClassPathXmlApplicationContext(
 			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)

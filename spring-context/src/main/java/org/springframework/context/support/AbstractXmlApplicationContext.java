@@ -80,17 +80,22 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
 		// Create a new XmlBeanDefinitionReader for the given BeanFactory.
+		// 为指定bean Factory 创建XmlBeanDefinitionReader
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
 		// Configure the bean definition reader with this context's
 		// resource loading environment.
+		// 对beanDefinitionReader 进行环境变茧的设恒、
 		beanDefinitionReader.setEnvironment(this.getEnvironment());
 		beanDefinitionReader.setResourceLoader(this);
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
 		// Allow a subclass to provide custom initialization of the reader,
 		// then proceed with actually loading the bean definitions.
+		// 对BeanDefinitionReader 进行设置，可以被盖
 		initBeanDefinitionReader(beanDefinitionReader);
+
+		// 配置文件的读取
 		loadBeanDefinitions(beanDefinitionReader);
 	}
 
@@ -117,6 +122,11 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @see #getConfigLocations
 	 * @see #getResources
 	 * @see #getResourcePatternResolver
+	 *
+	 * 使用 XmlBeanDefinitionReader 的 loadBeanDefinitions 方法进行配置文件的加载，
+	 * 这完全就是开始 BeanFactory 的套路。因为在 XmlBeanDefinitionReader 中已经将之前初始化的DefaultListableBeanFactory 注册进去了，
+	 * 所以XmlBeanDefinitionReader 所读取的BeanDefinitionHolder 都会注册到DefaultListableBeanFactory 中，也就是经过此步骤，类型
+	 * DefaultListableBeanFactory 的变量beanFactory 已经包含了所有解析好的配置。
 	 */
 	protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
 		Resource[] configResources = getConfigResources();

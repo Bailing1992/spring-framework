@@ -61,6 +61,16 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * @param path the absolute path within the class path
 	 * @see java.lang.ClassLoader#getResourceAsStream(String)
 	 * @see org.springframework.util.ClassUtils#getDefaultClassLoader()
+	 *
+	 * Spring 的 配置文件 读取 是通过 ClassPathResource 进行封装的
+	 *
+	 * 在 Java 中，将 不同来源的 资源 抽象成 URL ，通过 注册不同的 handler (URLStreamHandler)
+	 * 来处理不同来源的资源的读取逻辑，一般 handler 的类型使用不同前缀（协议， Protocol ）来识
+	 * 别，如“file:”，“http:” “jar:”等，然而URL 没有默认定义相对Classpath 或 ServletContext 等资
+	 * 源的handler ，虽然可以注册自己的URLStreamHandler 来解析特定的URL 前缀（协议）， 比如
+	 * classpath ： ”，然而这需要了解 URL 的实现机制，而且URL也没有提供基本的方法，如检查当
+	 * 前资源是否存在、检查当前资源是否可读等方法。因而 Spring 对其内部使用到的资源实现了自
+	 * 己的抽象结构： Resource 接口 封装底层资源。
 	 */
 	public ClassPathResource(String path) {
 		this(path, (ClassLoader) null);

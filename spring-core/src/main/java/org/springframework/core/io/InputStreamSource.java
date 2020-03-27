@@ -37,6 +37,9 @@ import java.io.InputStream;
  * @see Resource
  * @see InputStreamResource
  * @see ByteArrayResource
+ *
+ * InputStreamSource 封装 任何 能返回 InputStream 的类，比如File 、Classpath 下的资源 和 ByteArray 等。
+ * 它只有一个方法定义： getInputStream（），该方法返回一个新的InputStream 对象
  */
 public interface InputStreamSource {
 

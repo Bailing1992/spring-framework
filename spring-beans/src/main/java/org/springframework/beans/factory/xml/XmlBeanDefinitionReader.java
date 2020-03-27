@@ -75,6 +75,19 @@ import org.springframework.util.xml.XmlValidationModeDetector;
  * @see BeanDefinitionRegistry
  * @see org.springframework.beans.factory.support.DefaultListableBeanFactory
  * @see org.springframework.context.support.GenericApplicationContext
+ *
+ *
+ * XML配置文件的读取  是Spring 中重要的功能，因为Spring 的大部分功能都是以 配置 作为切入点的，
+ * 那么我们可以从XmlBeanDefinitionReader 中梳理一下资源文件读取、解析及注册的
+ * 大致脉络，首先我们看看各个类的功能。
+ *
+ *
+ * 1. 通过继承自 AbstractBeanDefinitionReader 中的方法，来使用 ResourLoader 将资源文件
+ * 路径转换为对应的 Resource 文件。
+ * 2. 通过 DocumentLoader 对 Resource 文件进行转换，将 Resource 文件转换为 Document 文件。
+ *
+ * 3. 通过实现接口 BeanDefinitionDocumentReader 的 DefaultBeanDefinitionDocumentReader 类
+ * 对 Document 进行解析，并使用 BeanDefinitionParserDelegate 对Element 进行解析。
  */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
@@ -118,6 +131,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	@Nullable
 	private NamespaceHandlerResolver namespaceHandlerResolver;
 
+
+	// DocumentLoader 定义从资源、文件加载到 转换为 Document 的功能。
 	private DocumentLoader documentLoader = new DefaultDocumentLoader();
 
 	@Nullable
@@ -503,7 +518,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see #setDocumentReaderClass
 	 * @see BeanDefinitionDocumentReader#registerBeanDefinitions
 	 */
-	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
+	public int 	registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
 		int countBefore = getRegistry().getBeanDefinitionCount();
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
